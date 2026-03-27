@@ -1,93 +1,121 @@
-# nodered-ui
+<div align="center">
 
+[![License][badge-license]][link-license] [![Build Status][badge-build]][link-build]
 
+<br/><img src="https://nodered.org/about/resources/media/node-red-icon-2.svg" width="150" title="Node-RED Logo"><br/>
 
-## Getting started
+[![Nodes][badge-nodes]][link-nodes] [![Flows][badge-flows]][link-flows] [![Collections][badge-collections]][link-collections]
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Low-code programming for event-driven applications
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+<br/><img src="https://nodered.org/images/node-red-screenshot.png" width="600" alt="Node-RED Screenshot"><br/>
 
-## Add your files
+[![Forum][badge-forum]][link-forum] [![GitHub][badge-github]][link-github] [![Slack][badge-slack]][link-slack]
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+</div>
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/macys/stores-ci-config/stores_sre_devops/nodered-ui.git
-git branch -M master
-git push -uf origin master
-```
+## Quick Start
 
-## Integrate with your tools
+Check out https://nodered.org/docs/getting-started/ for full instructions on getting
+started.
 
-* [Set up project integrations](https://gitlab.com/macys/stores-ci-config/stores_sre_devops/nodered-ui/-/settings/integrations)
+1. `sudo npm install -g --unsafe-perm node-red`
+2. `node-red`
+3. Open <http://localhost:1880>
 
-## Collaborate with your team
+<br/>
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+> [!NOTE]
+> More documentation can be found [here](https://nodered.org/docs). For further help, or general discussion, please join the [Node-RED Forum](https://discourse.nodered.org) or [Node-RED Slack](https://nodered.org/slack).
 
-## Test and Deploy
+## Links
 
-Use the built-in continuous integration in GitLab.
+- [Documentation ↗](https://nodered.org/docs/)
+- [About ↗](https://nodered.org/about/)
+- [Installation ↗](https://nodered.org/#get-started)
+- [Node-RED Library ↗](https://flows.nodered.org/)
+  - [Custom Nodes & Integrations ↗](https://flows.nodered.org/search?type=node)
+  - [Shared Flows ↗](https://flows.nodered.org/search?type=flow)
+  - [Node Collections ↗](https://flows.nodered.org/search?type=collection)
+- [Development](#development)
+- [Contributing](#contributing)
+- [Copyright and license](#copyright-and-license)
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+## Development
 
-***
+If you want to run the latest code from git, here's how to get started:
 
-# Editing this README
+1. Clone the code:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+        git clone https://github.com/node-red/node-red.git
+        cd node-red
 
-## Suggestions for a good README
+2. Install the node-red dependencies
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+        npm ci
 
-## Name
-Choose a self-explaining name for your project.
+3. Build the code
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+        npm run build
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+4. Run
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+        npm start
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Before raising a pull-request, please read our [contributing guide](https://github.com/node-red/node-red/blob/master/CONTRIBUTING.md).
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+This project adheres to the [Contributor Covenant 1.4](http://contributor-covenant.org/version/1/4/). By participating, you are expected to uphold this code. Please report unacceptable behavior to any of the project's core team at team@nodered.org.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Star history
 
-## License
-For open source projects, say how it is licensed.
+<a href="https://star-history.com/#node-red/node-red&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=node-red/node-red&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=node-red/node-red&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=node-red/node-red&type=Date" width="100%" />
+ </picture>
+</a>
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### Contributors
+
+It is maintained by:
+
+ * Nick O'Leary [@knolleary](http://twitter.com/knolleary)
+ * Dave Conway-Jones [@ceejay](http://twitter.com/ceejay)
+ * And many others:
+
+<a href="https://github.com/node-red/node-red/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=node-red/node-red" width="100%"/>
+</a>
+
+## Copyright and License
+
+Node-RED is a project of the [OpenJS Foundation](http://openjsf.org). Copyright OpenJS Foundation and other contributors, https://openjsf.org under [the Apache 2.0 license](LICENSE).
+
+<br/>
+<a href="http://openjsf.org">
+<img src="https://raw.githubusercontent.com/node-red/community-survey/refs/heads/main/public/openjs-foundation-logo.svg" width="240" title="OpenJS Foundation Logo">
+</a>
+
+<!-- Badge images -->
+[badge-license]: https://img.shields.io/badge/License-Apache_2.0-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec
+[badge-build]: https://img.shields.io/github/actions/workflow/status/node-red/node-red/tests.yml?branch=master&label=Build%20Status&style=for-the-badge
+[badge-forum]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscourse.nodered.org%2Fabout.json&query=%24.about.stats.users_count&suffix=%20members&label=Forum&logo=discourse&style=for-the-badge&color=0e76b2&logoColor=0e76b2&labelColor=ececec
+[badge-github]: https://img.shields.io/badge/dynamic/json?url=https://api.github.com/orgs/node-red&query=$.followers&suffix=%20followers&label=GitHub%20org&style=for-the-badge&logo=github&logoColor=24292F&labelColor=ececec&color=24292F
+[badge-slack]: https://img.shields.io/badge/Slack-Join%20Us-4A154B.svg?logo=slack&style=for-the-badge&logoColor=4A154B&labelColor=ececec
+[badge-nodes]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fflows.nodered.org%2Fthings%3Fformat%3Djson%26per_page%3D1%26type%3Dnode&query=$.meta.results.count&label=Nodes&style=for-the-badge&labelColor=ececec&color=8f0000
+[badge-flows]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fflows.nodered.org%2Fthings%3Fformat%3Djson%26per_page%3D1%26type%3Dflow&query=$.meta.results.count&label=Flows&style=for-the-badge&labelColor=ececec&color=8f0000
+[badge-collections]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fflows.nodered.org%2Fthings%3Fformat%3Djson%26per_page%3D1%26type%3Dcollection&query=$.meta.results.count&label=Collections&style=for-the-badge&labelColor=ececec&color=8f0000
+
+<!-- Badge links -->
+[link-license]: https://opensource.org/license/apache-2-0
+[link-build]: https://github.com/node-red/node-red/actions?query=branch%3Amaster
+[link-forum]: https://discourse.nodered.org
+[link-github]: https://github.com/node-red
+[link-slack]: https://nodered.org/slack
+[link-nodes]: https://flows.nodered.org/search?type=node
+[link-flows]: https://flows.nodered.org/search?type=flow
+[link-collections]: https://flows.nodered.org/search?type=collection
+[link-nodered]: https://nodered.org/
