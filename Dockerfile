@@ -1,11 +1,14 @@
-FROM nodered/node-red:latest
+FROM node:20.10.0-alpine AS runner
 
-# Copy your custom settings
-COPY settings.js /data/settings.js
+ENV NODE_ENV=production
 
-# Optional: install extra dependencies
-RUN npm install passport-google-oauth20 passport
+WORKDIR /app
+
+COPY runner/package.json runner/package-lock.json ./
+RUN npm ci --omit=dev
+
+COPY settings.js /app/settings.js
 
 EXPOSE 1880
 
-CMD ["node-red", "--settings", "/data/settings.js"]
+CMD ["npm", "start"]
