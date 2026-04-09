@@ -2,9 +2,12 @@ FROM node:20.10.0-alpine
 
 WORKDIR /app
 
+COPY package.json package-lock.json ./
+RUN npm ci
+
 COPY . .
 
-RUN npm install
+ENV NODE_ENV=production
 
 EXPOSE 1880
 
