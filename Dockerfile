@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
+RUN npm config set strict-ssl false \
+    && npm ci
 
 EXPOSE 1880
 
