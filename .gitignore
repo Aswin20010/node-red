@@ -16,6 +16,12 @@ credentials.json
 flows*.json
 nodes/node-red-nodes/
 node_modules
+<<<<<<< HEAD
+packages/node_modules
+public
+locales/zz-ZZ
+nodes/core/locales/zz-ZZ
+=======
 public
 locales/zz-ZZ
 nodes/core/locales/zz-ZZ
@@ -24,6 +30,7 @@ packages/node_modules/@node-red/editor-client/public
 !test/**/node_modules
 docs
 !packages/node_modules/**/docs
+>>>>>>> gitlab/master
 .vscode
 .nyc_output
 sync.ffs_db
@@ -31,4 +38,8 @@ sync.ffs_db
 test/resources/50-file-test-file.txt
 test/unit/@node-red/runtime/lib/nodes/.testUserHome
 *.key
+<<<<<<< HEAD
 *.pem
+=======
+*.pem
+>>>>>>> gitlab/master
