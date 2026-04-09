@@ -1,21 +1,11 @@
-FROM node:20.10.0-alpine
+FROM nodered/node-red:latest
 
-WORKDIR /app
+# Copy your custom settings
+COPY settings.js /data/settings.js
 
-<<<<<<< HEAD
-COPY . .
-
-RUN npm config set strict-ssl false \
-    && npm ci
-=======
-COPY package.json package-lock.json ./
-RUN npm ci
-
-COPY . .
-
-ENV NODE_ENV=production
->>>>>>> gitlab/master
+# Optional: install extra dependencies
+RUN npm install passport-google-oauth20 passport
 
 EXPOSE 1880
 
-CMD ["npm", "start", "--", "--settings", "packages/node_modules/node-red/settings.js"]
+CMD ["node-red", "--settings", "/data/settings.js"]
