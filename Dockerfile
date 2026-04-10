@@ -1,3 +1,4 @@
+#It uses enterprise approved Node
 FROM node:20.10.0-alpine AS runner
 
 ENV NODE_ENV=production
