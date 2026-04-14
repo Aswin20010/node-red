@@ -5,6 +5,6 @@ app.get('/healthcheck', (req, res) => {
   res.status(200).send('OK');
 });
 
-app.listen(8080, () => {
-  console.log('Healthcheck server running on port 8080');
+app.listen(80, () => {
+  console.log('Healthcheck server running on port 80');
 });
