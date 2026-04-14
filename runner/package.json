@@ -9,6 +9,20 @@
   "dependencies": {
     "node-red": "4.1.8",
     "passport": "0.7.0",
-    "passport-google-oauth20": "2.0.0"
+    "passport-google-oauth20": "2.0.0",
+
+    "node-red-node-swagger": "0.1.9",
+    "node-red-contrib-postgresql": "^0.15.4",
+    "node-red-node-mysql": "^1.0.0",
+    "node-red-node-ui-table": "^0.4.5",
+    "node-red-dashboard": "^3.6.6",
+    "node-red-contrib-google-cloud": "0.0.26",
+    "node-red-contrib-mongodb4": "^3.4.0",
+    "node-red-contrib-simple-soap": "^0.1.3",
+    "node-red-contrib-soap-plus": "^1.2.0",
+    "node-red-contrib-subflow2node": "^0.1.0",
+    "node-red-contrib-re-postgres": "^0.3.4",
+    "node-red-contrib-data-mapper": "^1.3.5",
+    "node-red-contrib-field-mapper": "^1.0.23"
   }
 }

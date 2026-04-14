@@ -237,12 +237,46 @@ adminAuth: {
      * in front of all admin http routes. For example, to set custom http
      * headers. It can be a single function or an array of middleware functions.
      */
-    // httpAdminMiddleware: function(req,res,next) {
-    //    // Set the X-Frame-Options header to limit where the editor
-    //    // can be embedded
-    //    //res.set('X-Frame-Options', 'sameorigin');
-    //    next();
-    // },
+    httpAdminMiddleware: function(req, res, next) {
+        if (req.path === "/installed-modules") {
+            try {
+                const fs = require("fs");
+                const path = require("path");
+
+                const pkgPath = path.join("/app", "package.json");
+                const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+
+                const deps = pkg.dependencies || {};
+
+                const installedModules = Object.keys(deps)
+                    .filter(name =>
+                        name.startsWith("node-red") ||
+                        name.startsWith("@node-red") ||
+                        name.startsWith("node-red-contrib")
+                    )
+                    .sort()
+                    .map(name => ({
+                        name,
+                        version: deps[name]
+                    }));
+
+                res.setHeader("Content-Type", "application/json");
+                return res.status(200).send({
+                    success: true,
+                    count: installedModules.length,
+                    modules: installedModules
+                });
+            } catch (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: "Failed to read installed modules",
+                    error: err.message
+                });
+            }
+        }
+
+        next();
+    },
 
     /** The following property can be used to set addition options on the session
      * cookie used as part of adminAuth authentication system
@@ -443,22 +477,17 @@ adminAuth: {
      * will install/load. It can use '*' as a wildcard that matches anything.
      */
     externalModules: {
-        // autoInstall: false,   /** Whether the runtime will attempt to automatically install missing modules */
-        // autoInstallRetry: 30, /** Interval, in seconds, between reinstall attempts */
-        // palette: {              /** Configuration for the Palette Manager */
-        //     allowInstall: true, /** Enable the Palette Manager in the editor */
-        //     allowUpdate: true,  /** Allow modules to be updated in the Palette Manager */
-        //     allowUpload: true,  /** Allow module tgz files to be uploaded and installed */
-        //     allowList: ['*'],
-        //     denyList: [],
-        //     allowUpdateList: ['*'],
-        //     denyUpdateList: []
-        // },
-        // modules: {              /** Configuration for node-specified modules */
-        //     allowInstall: true,
-        //     allowList: [],
-        //     denyList: []
-        // }
+        autoInstall: false,
+
+        palette: {
+            allowInstall: false,
+            allowUpdate: false,
+            allowUpload: false
+        },
+
+        modules: {
+            allowInstall: false
+        }
     },
 
 
@@ -489,14 +518,14 @@ adminAuth: {
          * time you access the editor for each release of Node-RED, set this to false
          */
         //tours: false,
-
         palette: {
-            /** The following property can be used to order the categories in the editor
-             * palette. If a node's category is not in the list, the category will get
-             * added to the end of the palette.
-             * If not set, the following default order is used:
-             */
-            //categories: ['subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage'],
+            // leave editable unset
+        },
+        projects: {
+            enabled: false,
+            workflow: {
+                mode: "manual"
+            }
         },
 
         projects: {

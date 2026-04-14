@@ -6,7 +6,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY runner/package.json runner/package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 COPY settings.js /app/settings.js
 
