@@ -13,6 +13,7 @@ RUN npm install express
 COPY settings.js /app/settings.js
 COPY health.js /app/health.js
 
+EXPOSE 1880
 EXPOSE 80
 
 CMD ["sh", "-c", "node health.js & npm start"]
