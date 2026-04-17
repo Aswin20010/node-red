@@ -207,6 +207,7 @@ module.exports = {
  ******************************************************************************/
 
     /** the tcp port that the Node-RED web server is listening on */
+    uiHost: "0.0.0.0",
     uiPort: process.env.PORT || 1880,
 
     /** By default, the Node-RED UI accepts connections on all IPv4 interfaces.
