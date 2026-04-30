@@ -20,6 +20,14 @@
  *
  **/
 
+// Set a global default git branch for the Git Push button.
+// This can be overridden per-flow by adding a GIT_BRANCH environment variable
+// in the flow tab's Properties → Environment Variables.
+// Leave as empty string "" to use per-flow env var or tab label as fallback.
+if (!process.env.GIT_BRANCH) {
+    process.env.GIT_BRANCH = "";   // e.g. "main" or "develop"
+}
+
 module.exports = {
 
 /*******************************************************************************
