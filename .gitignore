@@ -16,7 +16,6 @@ credentials.json
 flows*.json
 nodes/node-red-nodes/
 node_modules
-packages/node_modules
 !packages/node_modules/@node-red/editor-client/src/js/ui/gitpushbutton.js
 public
 locales/zz-ZZ
