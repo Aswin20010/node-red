@@ -17,13 +17,14 @@ flows*.json
 nodes/node-red-nodes/
 node_modules
 packages/node_modules
+!packages/node_modules/@node-red/editor-client/src/js/ui/gitpushbutton.js
 public
 locales/zz-ZZ
 nodes/core/locales/zz-ZZ
 public
 locales/zz-ZZ
 nodes/core/locales/zz-ZZ
-!packages/node_modules
+!packages/node_modulesP
 !test/**/node_modules
 docs
 !packages/node_modules/**/docs
