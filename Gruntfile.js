@@ -135,6 +135,7 @@ module.exports = function(grunt) {
                     // the right order
                     "packages/node_modules/@node-red/editor-client/src/js/jquery-addons.js",
                     "packages/node_modules/@node-red/editor-client/src/js/red.js",
+                    "packages/node_modules/@node-red/editor-client/src/js/ui/gitpushbutton.js",
                     "packages/node_modules/@node-red/editor-client/src/js/events.js",
                     "packages/node_modules/@node-red/editor-client/src/js/hooks.js",
                     "packages/node_modules/@node-red/editor-client/src/js/i18n.js",
@@ -166,7 +167,6 @@ module.exports = function(grunt) {
                     "packages/node_modules/@node-red/editor-client/src/js/ui/common/autoComplete.js",
                     "packages/node_modules/@node-red/editor-client/src/js/ui/actions.js",
                     "packages/node_modules/@node-red/editor-client/src/js/ui/deploy.js",
-                    "packages/node_modules/@node-red/editor-client/src/js/ui/gitpushbutton.js",
                     "packages/node_modules/@node-red/editor-client/src/js/ui/diagnostics.js",
                     "packages/node_modules/@node-red/editor-client/src/js/ui/diff.js",
                     "packages/node_modules/@node-red/editor-client/src/js/ui/keyboard.js",

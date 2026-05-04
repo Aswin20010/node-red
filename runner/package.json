@@ -4,13 +4,15 @@
   "private": true,
   "description": "Enterprise Node-RED runner with custom OAuth settings",
   "scripts": {
-    "start": "./node_modules/.bin/node-red --settings /app/settings.js"
+    "start": "node ./node_modules/node-red/red.js --settings ../settings.js",
+    "start:win": ".\\node_modules\\.bin\\node-red.cmd --settings ..\\settings.js",
+    "start:docker": "./node_modules/.bin/node-red --settings /app/settings.js",
+    "start:local": "node ./node_modules/node-red/red.js --settings ../settings.js"
   },
   "dependencies": {
     "node-red": "4.1.8",
     "passport": "0.7.0",
     "passport-google-oauth20": "2.0.0",
-
     "node-red-node-swagger": "0.1.9",
     "node-red-contrib-postgresql": "^0.15.4",
     "node-red-node-mysql": "^1.0.0",

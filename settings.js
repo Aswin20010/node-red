@@ -29,6 +29,9 @@ if (!process.env.GIT_BRANCH) {
 }
 
 module.exports = {
+    flowFile: "flows.json",
+
+    userDir: process.env.NODE_RED_USER_DIR || require("path").join(require("os").homedir(), ".node-red"),
 
 /*******************************************************************************
  * Flow File and User Directory Settings
@@ -246,46 +249,261 @@ module.exports = {
      * in front of all admin http routes. For example, to set custom http
      * headers. It can be a single function or an array of middleware functions.
      */
-    httpAdminMiddleware: function(req, res, next) {
-        if (req.path === "/installed-modules") {
-            try {
-                const fs = require("fs");
-                const path = require("path");
+    httpAdminMiddleware: (function() {
+        const express = require("express");
+        const router = express.Router();
 
-                const pkgPath = path.join("/app", "package.json");
-                const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
 
-                const deps = pkg.dependencies || {};
+        router.use((req, res, next) => {
 
-                const installedModules = Object.keys(deps)
-                    .filter(name =>
-                        name.startsWith("node-red") ||
-                        name.startsWith("@node-red") ||
-                        name.startsWith("node-red-contrib")
-                    )
-                    .sort()
-                    .map(name => ({
-                        name,
-                        version: deps[name]
-                    }));
+            // Existing logic
+            if (req.path === "/installed-modules") {
+                try {
+                    const fs = require("fs");
+                    const path = require("path");
 
-                res.setHeader("Content-Type", "application/json");
-                return res.status(200).send({
-                    success: true,
-                    count: installedModules.length,
-                    modules: installedModules
-                });
-            } catch (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Failed to read installed modules",
-                    error: err.message
-                });
+                    const pkgPath = path.join("/app", "package.json");
+                    const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+
+                    const deps = pkg.dependencies || {};
+
+                    const installedModules = Object.keys(deps)
+                        .filter(name =>
+                            name.startsWith("node-red") ||
+                            name.startsWith("@node-red") ||
+                            name.startsWith("node-red-contrib")
+                        )
+                        .sort()
+                        .map(name => ({
+                            name,
+                            version: deps[name]
+                        }));
+
+                    return res.status(200).json({
+                        success: true,
+                        count: installedModules.length,
+                        modules: installedModules
+                    });
+
+                } catch (err) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "Failed to read installed modules",
+                        error: err.message
+                    });
+                }
             }
+
+            next();
+        });
+
+        const { execFile } = require("child_process");
+        const path = require("path");
+
+        function runGit(args, cwd) {
+            return new Promise((resolve, reject) => {
+                execFile("git", args, { cwd }, (error, stdout, stderr) => {
+                    if (error) {
+                        return reject(new Error(stderr || stdout || error.message));
+                    }
+                    resolve({ stdout, stderr });
+                });
+            });
         }
 
-        next();
-    },
+        function getFlowEnv(req, tabId) {
+            const flows = req.app.get("settings")?._flows || [];
+            const tab = flows.find(f => f.id === tabId && f.type === "tab");
+            const env = {};
+
+            if (tab && Array.isArray(tab.env)) {
+                tab.env.forEach(e => {
+                    if (e && e.name) {
+                        env[e.name] = e.value;
+                    }
+                });
+            }
+
+            return env;
+        }
+
+router.post("/gitpush", express.json({ limit: "10mb" }), async (req, res) => {
+    try {
+        const fs = require("fs");
+        const os = require("os");
+
+        const { message, tabId } = req.body;
+
+        const userDir = process.env.NODE_RED_USER_DIR || path.join(os.homedir(), ".node-red");
+        const sourceFlowsPath = path.join(userDir, "flows.json");
+
+        if (!fs.existsSync(sourceFlowsPath)) {
+            return res.status(500).json({
+                error: "flows.json not found",
+                path: sourceFlowsPath
+            });
+        }
+
+        const allFlows = JSON.parse(fs.readFileSync(sourceFlowsPath, "utf8"));
+        const tab = allFlows.find(f => f.id === tabId && f.type === "tab");
+
+        if (!tab) {
+            return res.status(400).json({
+                error: "Active flow tab not found",
+                tabId
+            });
+        }
+
+        function readEnvArray(envArray) {
+            const out = {};
+            if (Array.isArray(envArray)) {
+                envArray.forEach(e => {
+                    if (e && e.name && String(e.name).trim() !== "") {
+                        out[e.name] = e.value;
+                    }
+                });
+            }
+            return out;
+        }
+
+        function firstValue(...values) {
+            return values.find(v => v !== undefined && v !== null && String(v).trim() !== "");
+        }
+
+        function safeBranchName(value) {
+            return String(value || "flow")
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9._/-]+/g, "-")
+                .replace(/\/+/g, "/")
+                .replace(/^-+|-+$/g, "");
+        }
+
+        const globalConfig = allFlows.find(f => f.type === "global-config");
+        const globalEnv = readEnvArray(globalConfig?.env);
+        const flowEnv = readEnvArray(tab.env);
+
+        const flowName = tab.label || tab.id || "flow";
+        const safeFlowName = safeBranchName(flowName);
+
+        const remoteUrl = firstValue(
+            flowEnv.GIT_REMOTE_URL,
+            globalEnv.GIT_REMOTE_URL,
+            process.env.GIT_REMOTE_URL
+        );
+
+        const branch = firstValue(
+            flowEnv.GIT_BRANCH,
+            process.env.GIT_BRANCH,
+            safeFlowName
+        );
+
+        const authorName = firstValue(
+            flowEnv.GIT_AUTHOR_NAME,
+            globalEnv.GIT_AUTHOR_NAME,
+            process.env.GIT_AUTHOR_NAME,
+            "NodeRED Bot"
+        );
+
+        const authorEmail = firstValue(
+            flowEnv.GIT_AUTHOR_EMAIL,
+            globalEnv.GIT_AUTHOR_EMAIL,
+            process.env.GIT_AUTHOR_EMAIL,
+            "nodered-bot@local"
+        );
+
+        const prefix = firstValue(
+            flowEnv.GIT_COMMIT_PREFIX,
+            globalEnv.GIT_COMMIT_PREFIX,
+            process.env.GIT_COMMIT_PREFIX,
+            "Node-RED Flow Update"
+        );
+
+        if (!remoteUrl) {
+            return res.status(400).json({
+                error: "Missing GIT_REMOTE_URL. Set it in flow env or global environment."
+            });
+        }
+
+        const exportDir = path.join(userDir, ".gitpush-export", safeFlowName);
+        fs.mkdirSync(exportDir, { recursive: true });
+
+        fs.readdirSync(exportDir).forEach(file => {
+            if (file !== ".git") {
+                fs.rmSync(path.join(exportDir, file), {
+                    recursive: true,
+                    force: true
+                });
+            }
+        });
+
+        const selectedFlow = allFlows.filter(node => {
+            return node.id === tabId || node.z === tabId;
+        });
+
+        fs.writeFileSync(
+            path.join(exportDir, "flows.json"),
+            JSON.stringify(selectedFlow, null, 2),
+            "utf8"
+        );
+
+        fs.writeFileSync(
+            path.join(exportDir, "README.md"),
+            `# ${flowName}\n\nExported from Node-RED Git Push button.\n`,
+            "utf8"
+        );
+
+        if (!fs.existsSync(path.join(exportDir, ".git"))) {
+            await runGit(["init"], exportDir);
+        }
+
+        await runGit(["config", "user.name", authorName], exportDir);
+        await runGit(["config", "user.email", authorEmail], exportDir);
+
+        try {
+            await runGit(["remote", "set-url", "origin", remoteUrl], exportDir);
+        } catch (e) {
+            await runGit(["remote", "add", "origin", remoteUrl], exportDir);
+        }
+
+        await runGit(["checkout", "-B", branch], exportDir);
+        await runGit(["add", "flows.json", "README.md"], exportDir);
+
+        const status = await runGit(["status", "--porcelain"], exportDir);
+        if (!status.stdout.trim()) {
+            return res.json({
+                success: true,
+                branch,
+                message: "No changes to commit",
+                flowName
+            });
+        }
+
+        const commitMsg = message || `${prefix}: ${flowName}`;
+
+        await runGit(["commit", "-m", commitMsg], exportDir);
+        await runGit(["push", "-u", "origin", branch], exportDir);
+
+        return res.json({
+            success: true,
+            branch,
+            message: commitMsg,
+            exportedFile: "flows.json",
+            flowName
+        });
+
+    } catch (err) {
+        console.error("❌ Git push failed:", err);
+
+        return res.status(500).json({
+            error: "Git push failed",
+            details: err.message
+        });
+    }
+});
+
+        return router;
+    })(),
 
     /** The following property can be used to set addition options on the session
      * cookie used as part of adminAuth authentication system

@@ -1,9 +1,7 @@
 .git
 .github
 node_modules
-packages
 test
-scripts
 docs
 .vscode
 coverage
