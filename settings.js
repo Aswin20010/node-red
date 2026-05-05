@@ -704,16 +704,16 @@ router.post("/gitpush", express.json({ limit: "10mb" }), async (req, res) => {
      * will install/load. It can use '*' as a wildcard that matches anything.
      */
     externalModules: {
-        autoInstall: false,
+        autoInstall: true,
 
         palette: {
-            allowInstall: false,
+            allowInstall: true,
             allowUpdate: false,
             allowUpload: false
         },
 
         modules: {
-            allowInstall: false
+            allowInstall: true
         }
     },
 
